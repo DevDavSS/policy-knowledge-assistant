@@ -2,7 +2,7 @@
 
 
 /*Lambda Document Processing Role*/
-resource "aws_iam_role" "lambda-document-processing-role" {
+resource "aws_iam_role" "lambda_document_processing_role" {
     name = "lambda-document-processing-role"
     assume_role_policy = jsonencode({
         Version = "2012-10-17"
@@ -19,8 +19,8 @@ resource "aws_iam_role" "lambda-document-processing-role" {
 
 }
 /*policy for Lambda Document Processing Role*/
-resource "aws_iam_policy" "lambda-document-processing-policy" {
-    name = "lambda-document-processing-policy"
+resource "aws_iam_policy" "lambda_document_processing_policy" {
+    name = "lambda_document_processing_policy"
     description = "Custom policy for lambda document processing role"
 
     policy = jsonencode({
@@ -45,16 +45,13 @@ resource "aws_iam_policy" "lambda-document-processing-policy" {
 }
 
 /*   attach Custom Policy to Role*/
-resource "aws_iam_role_policy_attachment" "lambda-document-processing-role-attachment" {
-    role = aws_iam_role.lambda-document-processing-role.name
-    policy_arn = aws_iam_policy.lambda-document-processing-policy.arn 
+resource "aws_iam_role_policy_attachment" "lambda_document_processing_role_attachment" {
+    role = aws_iam_role.lambda_document_processing_role.name
+    policy_arn = aws_iam_policy.lambda_document_processing_policy.arn 
 }
 /* Basic Execution Policy for Lambda */
-resource "aws_iam_role_attachment" "lambda-basic-execution" {
-    role = aws_iam_role.lambda-document-processing-role.name
+resource "aws_iam_role_policy_attachment" "lambda_basic_execution" {
+    role       = aws_iam_role.lambda_document_processing_role.name
     policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
-
-
-
 
