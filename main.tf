@@ -7,6 +7,9 @@ module "iam" {
 
   raw_bucket_arn = module.s3.raw_bucket_arn
   processed_bucket_arn = module.s3.processed_bucket_arn
+
+  opensearch_collection_arn = module.opensearch.collection_arn
+  knowledge_base_arn = module.bedrock_kb.knowledge_base_arn
 }
 
 module "lambda" {
@@ -30,14 +33,26 @@ module "s3-trigger"{
 
 module "opensearch" {
   source = "./modules/opensearch"
+
+  bedrock_role_arn = module.iam.bedrock_role_arn
 }
 
 module "bedrock_kb" {
-  source = "./modules/bedrock-knowledge-base"
+  source = "./modules/bedrock_kb"
+
+  bedrock_iam_role_arn = module.iam.bedrock_role_arn
+  opensearch_collection_arn = module.opensearch.collection_arn
+
+  processed_bucket_arn = module.s3.processed_bucket_arn
 }
 
 module "agentcore" {
   source = "./modules/agentcore"
+
+  bedrock_agentcore_role_arn = module.iam.bedrock_agentcore_role_arn
+
+  knowledge_base_id = module.bedrock_kb.knowledge_base_id
+  knowledge_base_arn = module.bedrock_kb.knowledge_base_arn
 }
 
 module "monitoring" {
